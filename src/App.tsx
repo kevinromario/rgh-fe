@@ -9,6 +9,8 @@ import {
   VStack,
   InputGroup,
   CloseButton,
+  Accordion,
+  Span,
 } from "@chakra-ui/react";
 import { LightMode, useColorMode } from "./components/ui/color-mode";
 import { useRef, useState } from "react";
@@ -16,7 +18,36 @@ import { LuMoon, LuSun } from "react-icons/lu";
 
 const gap = 5;
 
+const users = [
+  {
+    title: "Kevin",
+    value: "user-one",
+    text: "Content User One",
+  },
+  {
+    title: "Yoga",
+    value: "user-two",
+    text: "Content User Two",
+  },
+  {
+    title: "Abdul",
+    value: "user-third",
+    text: "Content User Third",
+  },
+  {
+    title: "Beta",
+    value: "user-four",
+    text: "Content User Four",
+  },
+  {
+    title: "Alpha",
+    value: "user-five",
+    text: "Content User Five",
+  },
+];
+
 function App() {
+  const [openedUsers, setOpenedUsers] = useState<string[]>([]);
   const { toggleColorMode, colorMode } = useColorMode();
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [inputText, setInputText] = useState<string>("");
@@ -34,6 +65,7 @@ function App() {
       onClick={() => {
         setInputText("");
         setSearchUsername("");
+        setOpenedUsers([]);
         inputRef.current?.focus();
       }}
       me="-2"
@@ -90,6 +122,56 @@ function App() {
               <Text alignSelf="self-start" fontWeight="light">
                 Showing users for {searchUsername}
               </Text>
+            )}
+            {searchUsername && (
+              <Accordion.Root
+                multiple
+                collapsible
+                value={openedUsers}
+                onValueChange={(e) => setOpenedUsers(e.value)}
+              >
+                <VStack>
+                  <LightMode>
+                    {users.map((item, index) => {
+                      const isOpened = openedUsers.find(
+                        (user) => user === item.value
+                      );
+                      return (
+                        <Accordion.Item
+                          w="full"
+                          key={index}
+                          value={item.value}
+                          borderBottomStyle={isOpened ? "solid" : "none"}
+                        >
+                          <Accordion.ItemTrigger
+                            cursor="pointer"
+                            bgColor="gray.200"
+                            paddingX="3"
+                          >
+                            <Span flex="1">{item.title}</Span>
+
+                            <Accordion.ItemIndicator />
+                          </Accordion.ItemTrigger>
+                          <Accordion.ItemContent>
+                            <Accordion.ItemBody>
+                              <Box
+                                bgColor="gray.300"
+                                padding="3"
+                                borderRadius="sm"
+                              >
+                                {item.text}
+                              </Box>
+                            </Accordion.ItemBody>
+                          </Accordion.ItemContent>
+                        </Accordion.Item>
+                      );
+                    })}
+                    <Button w="full" variant="subtle">
+                      Load More
+                    </Button>
+                  </LightMode>
+                </VStack>
+              </Accordion.Root>
             )}
           </VStack>
         </Box>
