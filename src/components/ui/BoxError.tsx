@@ -7,7 +7,7 @@ export function BoxError({ message }: { message: string }) {
       <HStack align="center">
         <Icon color="red.700" data-testid="icon-error">
           <BiSolidError />
-        </Icon>{" "}
+        </Icon>
         {message}
       </HStack>
     </Box>

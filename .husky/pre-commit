@@ -1,0 +1,8 @@
+#!/usr/bin/env sh
+# husky
+
+changed_files=$(git diff --cached --name-only --diff-filter=ACM | grep -E '.(ts|tsx|js|jsx)$')
+
+if [ -n "$changed_files" ]; then
+  npx jest --bail --findRelatedTests $changed_files
+fi
