@@ -12,12 +12,14 @@ import { useColorModeValue } from "src/hooks/useColorMode";
 import type { GithubUser } from "../types/githubUser.type";
 import { useUserRepos } from "../hooks/useGithubQuery";
 import { useEffect } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 
 type GithubRepositoriesProps = {
   user: GithubUser;
   isOpened: boolean;
 };
 export function GithubRepositories(props: GithubRepositoriesProps) {
+  const queryClient = useQueryClient();
   const accordionContentBgColor = useColorModeValue("gray.300", "gray.400");
 
   const {
@@ -32,8 +34,10 @@ export function GithubRepositories(props: GithubRepositoriesProps) {
   useEffect(() => {
     if (props.isOpened) {
       fetchGithubRepos();
+    } else {
+      queryClient.removeQueries({ queryKey: ["repos", props.user.login] });
     }
-  }, [props.isOpened, fetchGithubRepos]);
+  }, [props.isOpened, fetchGithubRepos, props.user.login, queryClient]);
   return (
     <VStack>
       {data?.pages
@@ -63,7 +67,7 @@ export function GithubRepositories(props: GithubRepositoriesProps) {
           );
         })}
       {isLoading && <Skeleton w="full" height="5" />}
-      {!hasNextPage && <Text>- No more repositories -</Text>}
+      {!hasNextPage && !isLoading && <Text>- No more repositories -</Text>}
       {hasNextPage && (
         <Button
           w="full"
