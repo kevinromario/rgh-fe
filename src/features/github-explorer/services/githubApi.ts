@@ -1,4 +1,3 @@
-// services/githubApi.ts
 import axios, { AxiosError } from "axios";
 import { GITHUB_API_BASE, LIMIT_PER_PAGE, RATE_LIMIT_MSG } from "src/constants";
 import type { GithubErrorResponse } from "../types/githubError.type";
