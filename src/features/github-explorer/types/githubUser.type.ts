@@ -1,4 +1,4 @@
-type Item = {
+export type GithubUser = {
   login: string;
   id: 35074883;
   node_id: string;
@@ -21,8 +21,8 @@ type Item = {
   score: number;
 };
 
-export type User = {
+export type UserResponse = {
   total_count: number;
   incomplete_results: boolean;
-  items: Item[];
+  items: GithubUser[];
 };
