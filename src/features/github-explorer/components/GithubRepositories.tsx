@@ -13,6 +13,7 @@ import type { GithubUser } from "../types/githubUser.type";
 import { useUserRepos } from "../hooks/useGithubQuery";
 import { useEffect } from "react";
 import { useQueryClient } from "@tanstack/react-query";
+import { BoxError } from "src/components/ui/BoxError";
 
 type GithubRepositoriesProps = {
   user: GithubUser;
@@ -29,6 +30,7 @@ export function GithubRepositories(props: GithubRepositoriesProps) {
     hasNextPage,
     isLoading,
     isFetchingNextPage,
+    error,
   } = useUserRepos(props.user.login);
 
   useEffect(() => {
@@ -66,8 +68,11 @@ export function GithubRepositories(props: GithubRepositoriesProps) {
             </Box>
           );
         })}
+      {error && <BoxError message={error.message} />}
       {isLoading && <Skeleton w="full" height="5" />}
-      {!hasNextPage && !isLoading && <Text>- No more repositories -</Text>}
+      {!hasNextPage && !isLoading && !error && (
+        <Text>- No more repositories -</Text>
+      )}
       {hasNextPage && (
         <Button
           w="full"
