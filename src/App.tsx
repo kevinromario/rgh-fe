@@ -3,21 +3,19 @@ import {
   Button,
   Container,
   HStack,
-  Input,
   Text,
   VStack,
-  InputGroup,
-  CloseButton,
-  Accordion,
-  Span,
+  Accordion as AccordionRoot,
   Icon,
 } from "@chakra-ui/react";
-import { ColorModeButton, LightMode } from "./components/ui/colorMode";
-import { useRef, useState } from "react";
+import { ColorModeButton, LightMode } from "./components/ui/ColorMode";
+import { useState } from "react";
+
+import { SearchInput } from "./components/ui/SearchInput";
+import { MAX_WIDTH } from "./constants";
+import { AccordionItem } from "./components/ui/AccordionItem";
 import { FaStar } from "react-icons/fa";
 import { useColorModeValue } from "./hooks/useColorMode";
-
-const gap = 5;
 
 const users = [
   {
@@ -48,12 +46,12 @@ const users = [
 ];
 
 function App() {
+  const { Root: Accordion } = AccordionRoot;
   const [openedUsers, setOpenedUsers] = useState<string[]>([]);
-  const inputRef = useRef<HTMLInputElement | null>(null);
   const [inputText, setInputText] = useState<string>("");
   const [searchUsername, setSearchUsername] = useState<string>("");
 
-  const accordionContent = useColorModeValue("gray.300", "gray.400");
+  const accordionContentBgColor = useColorModeValue("gray.300", "gray.400");
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -61,54 +59,26 @@ function App() {
     setSearchUsername(inputText);
   };
 
-  const endElement = inputText ? (
-    <CloseButton
-      size="xs"
-      onClick={() => {
-        setInputText("");
-        setSearchUsername("");
-        setOpenedUsers([]);
-        inputRef.current?.focus();
-      }}
-      me="-2"
-    />
-  ) : undefined;
-
   return (
     <Container>
       <VStack p="7">
-        <Box
-          w="full"
-          maxWidth={{
-            base: "72",
-            md: "lg",
-            lg: "xl",
-            xl: "2xl",
-            "2xl": "3xl",
-            "3xl": "4xl",
-            "4xl": "5xl",
-          }}
-        >
-          <VStack gap={gap}>
+        <Box w="full" maxWidth={MAX_WIDTH}>
+          <VStack gap={5}>
             <HStack w="full" justifyContent="space-between">
               <Text>GitHub Repositories Explorer</Text>
               <ColorModeButton />
             </HStack>
             <form onSubmit={handleSubmit} style={{ width: "100%" }}>
-              <VStack gap={gap}>
-                <LightMode>
-                  <InputGroup endElement={endElement}>
-                    <Input
-                      ref={inputRef}
-                      value={inputText}
-                      placeholder="Enter username"
-                      backgroundColor="gray.200"
-                      onChange={(x) => {
-                        setInputText(x.target.value);
-                      }}
-                    />
-                  </InputGroup>
-                </LightMode>
+              <VStack>
+                <SearchInput
+                  value={inputText}
+                  onChange={setInputText}
+                  onClear={() => {
+                    setInputText("");
+                    setSearchUsername("");
+                    setOpenedUsers([]);
+                  }}
+                />
                 <Button type="submit" w="full" colorPalette="blue">
                   Search
                 </Button>
@@ -120,7 +90,7 @@ function App() {
               </Text>
             )}
             {searchUsername && (
-              <Accordion.Root
+              <Accordion
                 multiple
                 collapsible
                 value={openedUsers}
@@ -128,62 +98,42 @@ function App() {
               >
                 <VStack>
                   <LightMode>
-                    {users.map((item, index) => {
-                      const isOpened = openedUsers.find(
-                        (user) => user === item.value
-                      );
+                    {users.map((user, index) => {
                       return (
-                        <Accordion.Item
-                          w="full"
+                        <AccordionItem
                           key={index}
-                          value={item.value}
-                          borderBottomStyle={isOpened ? "solid" : "none"}
+                          {...user}
+                          isOpened={openedUsers.includes(user.value)}
                         >
-                          <Accordion.ItemTrigger
-                            cursor="pointer"
-                            bgColor="gray.200"
-                            paddingX="3"
-                          >
-                            <Span flex="1">{item.title}</Span>
-
-                            <Accordion.ItemIndicator />
-                          </Accordion.ItemTrigger>
-                          <Accordion.ItemContent>
-                            <Accordion.ItemBody paddingLeft="3">
-                              <VStack gap={gap}>
-                                <Box
-                                  w="full"
-                                  bgColor={accordionContent}
-                                  padding="3"
-                                  borderRadius="sm"
-                                >
-                                  <VStack alignItems="flex-start">
-                                    <HStack
-                                      w="full"
-                                      justifyContent="space-between"
-                                    >
-                                      <Text fontWeight="bold">{item.text}</Text>
-                                      <HStack gap="1">
-                                        <Text fontWeight="bold">18</Text>
-                                        <Icon>
-                                          <FaStar />
-                                        </Icon>
-                                      </HStack>
-                                    </HStack>
-                                    <Text>Description</Text>
-                                  </VStack>
-                                </Box>
-                                <Button
-                                  w="full"
-                                  variant="subtle"
-                                  colorPalette="gray"
-                                >
-                                  Load More Repository
-                                </Button>
+                          <VStack>
+                            <Box
+                              w="full"
+                              bgColor={accordionContentBgColor}
+                              padding="3"
+                              borderRadius="sm"
+                            >
+                              <VStack alignItems="flex-start">
+                                <HStack w="full" justifyContent="space-between">
+                                  <Text fontWeight="bold">{user.text}</Text>
+                                  <HStack gap="1">
+                                    <Text fontWeight="bold">18</Text>
+                                    <Icon>
+                                      <FaStar />
+                                    </Icon>
+                                  </HStack>
+                                </HStack>
+                                <Text>Description</Text>
                               </VStack>
-                            </Accordion.ItemBody>
-                          </Accordion.ItemContent>
-                        </Accordion.Item>
+                            </Box>
+                            <Button
+                              w="full"
+                              variant="subtle"
+                              colorPalette="gray"
+                            >
+                              Load More Repository
+                            </Button>
+                          </VStack>
+                        </AccordionItem>
                       );
                     })}
                     <Button w="full" variant="subtle" colorPalette="blue">
@@ -191,7 +141,7 @@ function App() {
                     </Button>
                   </LightMode>
                 </VStack>
-              </Accordion.Root>
+              </Accordion>
             )}
           </VStack>
         </Box>
