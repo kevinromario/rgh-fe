@@ -5,7 +5,6 @@ import {
   HStack,
   Input,
   Text,
-  Switch,
   VStack,
   InputGroup,
   CloseButton,
@@ -13,14 +12,10 @@ import {
   Span,
   Icon,
 } from "@chakra-ui/react";
-import {
-  LightMode,
-  useColorMode,
-  useColorModeValue,
-} from "./components/ui/color-mode";
+import { ColorModeButton, LightMode } from "./components/ui/colorMode";
 import { useRef, useState } from "react";
-import { LuMoon, LuSun } from "react-icons/lu";
 import { FaStar } from "react-icons/fa";
+import { useColorModeValue } from "./hooks/useColorMode";
 
 const gap = 5;
 
@@ -54,7 +49,6 @@ const users = [
 
 function App() {
   const [openedUsers, setOpenedUsers] = useState<string[]>([]);
-  const { toggleColorMode, colorMode } = useColorMode();
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [inputText, setInputText] = useState<string>("");
   const [searchUsername, setSearchUsername] = useState<string>("");
@@ -98,13 +92,7 @@ function App() {
           <VStack gap={gap}>
             <HStack w="full" justifyContent="space-between">
               <Text>GitHub Repositories Explorer</Text>
-              <Button variant="ghost" onClick={toggleColorMode}>
-                <Switch.Root checked={colorMode === "dark" ? true : false}>
-                  <Switch.HiddenInput />
-                  <Switch.Control />
-                </Switch.Root>
-                {colorMode === "light" ? <LuSun /> : <LuMoon />}
-              </Button>
+              <ColorModeButton />
             </HStack>
             <form onSubmit={handleSubmit} style={{ width: "100%" }}>
               <VStack gap={gap}>
