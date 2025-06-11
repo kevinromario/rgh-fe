@@ -1,7 +1,7 @@
-import axios, { AxiosError, AxiosHeaders } from "axios";
+import axios from "axios";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { fetchUsersByUsername, fetchReposByUsername } from "./githubApi";
-import { LIMIT_PER_PAGE, RATE_LIMIT_MSG } from "src/constants";
+import { LIMIT_PER_PAGE } from "src/constants";
 
 vi.mock("axios");
 const mockedAxios = axios as unknown as {
