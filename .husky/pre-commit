@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+# husky
+
+npx vitest run --bail=1 --changed
