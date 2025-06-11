@@ -46,7 +46,6 @@ export function GithubUsers(props: GithubUsersProps) {
                   value={user.id.toString()}
                   title={user.login}
                   isOpened={isOpened}
-                  onClick={() => null}
                 >
                   <GithubRepositories user={user} isOpened={isOpened} />
                 </AccordionItem>

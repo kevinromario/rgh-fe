@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { BoxError } from "./BoxError";
 import { ChakraProvider, defaultSystem } from "@chakra-ui/react";
+import { describe, it, expect } from "vitest";
 
 describe("BoxError", () => {
   it("renders the given error message", () => {

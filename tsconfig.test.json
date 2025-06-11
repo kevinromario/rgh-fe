@@ -1,13 +1,10 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
+    "types": ["vitest/globals", "@testing-library/jest-dom"],
+    "module": "ESNext",
     "target": "ES2020",
-    "module": "commonjs",
-    "jsx": "react-jsx",
-    "types": ["jest", "@testing-library/jest-dom", "node"],
-    "esModuleInterop": true,
-    "allowJs": true,
-    "isolatedModules": false
+    "jsx": "react-jsx"
   },
-  "include": ["src", "jest.setup.ts"]
+  "include": ["src", "vitest.setup.ts"]
 }
