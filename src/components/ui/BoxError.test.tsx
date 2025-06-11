@@ -1,20 +1,3 @@
-// console.log("structuredClone in test env:", typeof structuredClone);
-// import { render, screen } from "@testing-library/react";
-// import { ChakraProvider, defaultSystem } from "@chakra-ui/react";
-// import { BoxError } from "./BoxError";
-
-// describe("Button", () => {
-//   it("renders with text", () => {
-//     render(
-//       <ChakraProvider value={defaultSystem}>
-//         <BoxError message="Not Found" />
-//       </ChakraProvider>
-//     );
-
-//     expect(screen.getByText("Not Found")).toBeInTheDocument();
-//   });
-// });
-
 import { render, screen } from "@testing-library/react";
 import { BoxError } from "./BoxError";
 import { ChakraProvider, defaultSystem } from "@chakra-ui/react";
