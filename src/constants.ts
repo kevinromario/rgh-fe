@@ -7,3 +7,5 @@ export const MAX_WIDTH = {
   "3xl": "4xl",
   "4xl": "5xl",
 };
+
+export const GITHUB_API_BASE = "https://api.github.com";

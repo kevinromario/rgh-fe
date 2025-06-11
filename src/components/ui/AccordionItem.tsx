@@ -5,6 +5,7 @@ type AccordionItemProps = {
   value: string;
   isOpened: boolean;
   children: React.ReactNode;
+  onClick: () => void;
 };
 
 export function AccordionItem({

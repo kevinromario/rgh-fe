@@ -16,34 +16,8 @@ import { MAX_WIDTH } from "./constants";
 import { AccordionItem } from "./components/ui/AccordionItem";
 import { FaStar } from "react-icons/fa";
 import { useColorModeValue } from "./hooks/useColorMode";
-
-const users = [
-  {
-    title: "Kevin",
-    value: "user-one",
-    text: "Content User One",
-  },
-  {
-    title: "Yoga",
-    value: "user-two",
-    text: "Content User Two",
-  },
-  {
-    title: "Abdul",
-    value: "user-third",
-    text: "Content User Third",
-  },
-  {
-    title: "Beta",
-    value: "user-four",
-    text: "Content User Four",
-  },
-  {
-    title: "Alpha",
-    value: "user-five",
-    text: "Content User Five",
-  },
-];
+import { useSearchGithubUsers } from "./hooks/useGithubQuery";
+import { useQueryClient } from "@tanstack/react-query";
 
 function App() {
   const { Root: Accordion } = AccordionRoot;
@@ -53,10 +27,27 @@ function App() {
 
   const accordionContentBgColor = useColorModeValue("gray.300", "gray.400");
 
+  const queryClient = useQueryClient();
+
+  const {
+    data: githubUsers,
+    refetch: fetchGithubUsers,
+    fetchNextPage: fetchNextGithubUsers,
+    hasNextPage: hasNextGithubUsers,
+    isLoading: isLoadingFetchGithubUsers,
+    isFetchingNextPage: isLoadingNextGithubUsers,
+  } = useSearchGithubUsers(inputText);
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("inputText: ", inputText);
     setSearchUsername(inputText);
+    fetchGithubUsers();
+  };
+
+  const handleOnChange = (text: string) => {
+    setInputText(text);
+    queryClient.removeQueries({ queryKey: ["search-users", searchUsername] });
+    setSearchUsername("");
   };
 
   return (
@@ -72,14 +63,19 @@ function App() {
               <VStack>
                 <SearchInput
                   value={inputText}
-                  onChange={setInputText}
+                  onChange={handleOnChange}
                   onClear={() => {
                     setInputText("");
                     setSearchUsername("");
                     setOpenedUsers([]);
                   }}
                 />
-                <Button type="submit" w="full" colorPalette="blue">
+                <Button
+                  type="submit"
+                  w="full"
+                  colorPalette="blue"
+                  loading={isLoadingFetchGithubUsers}
+                >
                   Search
                 </Button>
               </VStack>
@@ -89,7 +85,7 @@ function App() {
                 Showing users for {searchUsername}
               </Text>
             )}
-            {searchUsername && (
+            {searchUsername && githubUsers?.pages && (
               <Accordion
                 multiple
                 collapsible
@@ -98,47 +94,62 @@ function App() {
               >
                 <VStack>
                   <LightMode>
-                    {users.map((user, index) => {
-                      return (
-                        <AccordionItem
-                          key={index}
-                          {...user}
-                          isOpened={openedUsers.includes(user.value)}
-                        >
-                          <VStack>
-                            <Box
-                              w="full"
-                              bgColor={accordionContentBgColor}
-                              padding="3"
-                              borderRadius="sm"
-                            >
-                              <VStack alignItems="flex-start">
-                                <HStack w="full" justifyContent="space-between">
-                                  <Text fontWeight="bold">{user.text}</Text>
-                                  <HStack gap="1">
-                                    <Text fontWeight="bold">18</Text>
-                                    <Icon>
-                                      <FaStar />
-                                    </Icon>
+                    {githubUsers.pages
+                      .flatMap((p) => p.items)
+                      .map((user, index) => {
+                        return (
+                          <AccordionItem
+                            key={index}
+                            value={user.id.toString()}
+                            title={user.login}
+                            isOpened={openedUsers.includes(user.id.toString())}
+                            onClick={() => null}
+                          >
+                            <VStack>
+                              <Box
+                                w="full"
+                                bgColor={accordionContentBgColor}
+                                padding="3"
+                                borderRadius="sm"
+                              >
+                                <VStack alignItems="flex-start">
+                                  <HStack
+                                    w="full"
+                                    justifyContent="space-between"
+                                  >
+                                    <Text fontWeight="bold">{user.login}</Text>
+                                    <HStack gap="1">
+                                      <Text fontWeight="bold">18</Text>
+                                      <Icon>
+                                        <FaStar />
+                                      </Icon>
+                                    </HStack>
                                   </HStack>
-                                </HStack>
-                                <Text>Description</Text>
-                              </VStack>
-                            </Box>
-                            <Button
-                              w="full"
-                              variant="subtle"
-                              colorPalette="gray"
-                            >
-                              Load More Repository
-                            </Button>
-                          </VStack>
-                        </AccordionItem>
-                      );
-                    })}
-                    <Button w="full" variant="subtle" colorPalette="blue">
-                      Load More Users
-                    </Button>
+                                  <Text>Description</Text>
+                                </VStack>
+                              </Box>
+                              <Button
+                                w="full"
+                                variant="subtle"
+                                colorPalette="gray"
+                              >
+                                Load More Repository
+                              </Button>
+                            </VStack>
+                          </AccordionItem>
+                        );
+                      })}
+                    {hasNextGithubUsers && (
+                      <Button
+                        w="full"
+                        variant="subtle"
+                        colorPalette="blue"
+                        onClick={() => fetchNextGithubUsers()}
+                        loading={isLoadingNextGithubUsers}
+                      >
+                        Load More Users
+                      </Button>
+                    )}
                   </LightMode>
                 </VStack>
               </Accordion>
