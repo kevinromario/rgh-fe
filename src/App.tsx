@@ -11,10 +11,16 @@ import {
   CloseButton,
   Accordion,
   Span,
+  Icon,
 } from "@chakra-ui/react";
-import { LightMode, useColorMode } from "./components/ui/color-mode";
+import {
+  LightMode,
+  useColorMode,
+  useColorModeValue,
+} from "./components/ui/color-mode";
 import { useRef, useState } from "react";
 import { LuMoon, LuSun } from "react-icons/lu";
+import { FaStar } from "react-icons/fa";
 
 const gap = 5;
 
@@ -52,6 +58,8 @@ function App() {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [inputText, setInputText] = useState<string>("");
   const [searchUsername, setSearchUsername] = useState<string>("");
+
+  const accordionContent = useColorModeValue("gray.300", "gray.400");
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -153,21 +161,45 @@ function App() {
                             <Accordion.ItemIndicator />
                           </Accordion.ItemTrigger>
                           <Accordion.ItemContent>
-                            <Accordion.ItemBody>
-                              <Box
-                                bgColor="gray.300"
-                                padding="3"
-                                borderRadius="sm"
-                              >
-                                {item.text}
-                              </Box>
+                            <Accordion.ItemBody paddingLeft="3">
+                              <VStack gap={gap}>
+                                <Box
+                                  w="full"
+                                  bgColor={accordionContent}
+                                  padding="3"
+                                  borderRadius="sm"
+                                >
+                                  <VStack alignItems="flex-start">
+                                    <HStack
+                                      w="full"
+                                      justifyContent="space-between"
+                                    >
+                                      <Text fontWeight="bold">{item.text}</Text>
+                                      <HStack gap="1">
+                                        <Text fontWeight="bold">18</Text>
+                                        <Icon>
+                                          <FaStar />
+                                        </Icon>
+                                      </HStack>
+                                    </HStack>
+                                    <Text>Description</Text>
+                                  </VStack>
+                                </Box>
+                                <Button
+                                  w="full"
+                                  variant="subtle"
+                                  colorPalette="gray"
+                                >
+                                  Load More Repository
+                                </Button>
+                              </VStack>
                             </Accordion.ItemBody>
                           </Accordion.ItemContent>
                         </Accordion.Item>
                       );
                     })}
-                    <Button w="full" variant="subtle">
-                      Load More
+                    <Button w="full" variant="subtle" colorPalette="blue">
+                      Load More Users
                     </Button>
                   </LightMode>
                 </VStack>
