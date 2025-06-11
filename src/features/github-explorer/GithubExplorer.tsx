@@ -64,14 +64,15 @@ export default function GithubExplorer() {
                   w="full"
                   colorPalette="blue"
                   loading={isLoading}
+                  disabled={inputText === searchUsername}
                 >
                   Search
                 </Button>
               </VStack>
             </form>
-            {searchUsername && (
+            {searchUsername && data?.pages && (
               <Text alignSelf="self-start" fontWeight="light">
-                Showing users for {searchUsername}
+                Showing users for "{searchUsername}"
               </Text>
             )}
             {searchUsername && data?.pages && (

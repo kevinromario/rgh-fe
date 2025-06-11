@@ -42,7 +42,7 @@ export function GithubUsers(props: GithubUsersProps) {
               const isOpened = props.openedUsers.includes(user.id.toString());
               return (
                 <AccordionItem
-                  key={index}
+                  key={`user-${index}`}
                   value={user.id.toString()}
                   title={user.login}
                   isOpened={isOpened}
