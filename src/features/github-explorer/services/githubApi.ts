@@ -1,6 +1,6 @@
 // services/githubApi.ts
 import axios from "axios";
-import { GITHUB_API_BASE } from "../constants";
+import { GITHUB_API_BASE } from "../../../constants";
 
 export const fetchUsersByUsername = async (
   username: string,
@@ -23,8 +23,7 @@ export const fetchReposByUsername = async (
   perPage = 5
 ) => {
   const { data } = await axios.get(
-    // `${GITHUB_API_BASE}/users/${username}/repos`,
-    `${GITHUB_API_BASE}/users/${username}/repository`,
+    `${GITHUB_API_BASE}/users/${username}/repos`,
     {
       params: {
         page,

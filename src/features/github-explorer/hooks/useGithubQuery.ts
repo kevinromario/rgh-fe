@@ -1,17 +1,16 @@
-// hooks/useGithubQuery.ts
 import { useInfiniteQuery, type InfiniteData } from "@tanstack/react-query";
 import {
   fetchUsersByUsername,
   fetchReposByUsername,
 } from "../services/githubApi";
-import type { User } from "../types/user.type";
+import type { UserResponse } from "../types/githubUser.type";
+import type { ReposResponse } from "../types/githubRepos.type";
 
-// Search GitHub users
 export const useSearchGithubUsers = (username: string) =>
   useInfiniteQuery<
-    User,
+    UserResponse,
     Error,
-    InfiniteData<User, number>,
+    InfiniteData<UserResponse, number>,
     ["search-users", string],
     number
   >({
@@ -28,7 +27,13 @@ export const useSearchGithubUsers = (username: string) =>
   });
 
 export const useUserRepos = (username: string) =>
-  useInfiniteQuery({
+  useInfiniteQuery<
+    ReposResponse,
+    Error,
+    InfiniteData<ReposResponse, number>,
+    ["repos", string],
+    number
+  >({
     queryKey: ["repos", username],
     queryFn: ({ pageParam = 1 }) => fetchReposByUsername(username, pageParam),
     initialPageParam: 1,
