@@ -1,5 +1,3 @@
-"use client";
-
 import type { ButtonProps, SpanProps } from "@chakra-ui/react";
 import { Button, ClientOnly, Skeleton, Span, Switch } from "@chakra-ui/react";
 import { ThemeProvider } from "next-themes";
@@ -18,7 +16,11 @@ export function ColorModeProvider(props: ColorModeProviderProps) {
 
 export function ColorModeIcon() {
   const { colorMode } = useColorMode();
-  return colorMode === "dark" ? <LuMoon /> : <LuSun />;
+  return colorMode === "dark" ? (
+    <LuMoon data-testid="lu-moon" />
+  ) : (
+    <LuSun data-testid="lu-sun" />
+  );
 }
 
 type ColorModeButtonProps = Omit<ButtonProps, "aria-label">;
@@ -30,7 +32,13 @@ export const ColorModeButton = React.forwardRef<
   const { colorMode, toggleColorMode } = useColorMode();
   return (
     <ClientOnly fallback={<Skeleton boxSize="8" />}>
-      <Button ref={ref} variant="ghost" onClick={toggleColorMode} {...props}>
+      <Button
+        data-testid="color-mode-btn"
+        ref={ref}
+        variant="ghost"
+        onClick={toggleColorMode}
+        {...props}
+      >
         <Switch.Root checked={colorMode === "dark" ? true : false}>
           <Switch.HiddenInput />
           <Switch.Control />
