@@ -5,6 +5,7 @@ import {
 } from "../services/githubApi";
 import type { UserResponse } from "../types/githubUser.type";
 import type { ReposResponse } from "../types/githubRepos.type";
+import { LIMIT_PER_PAGE } from "src/constants";
 
 export const useSearchGithubUsers = (username: string) =>
   useInfiniteQuery<
@@ -38,6 +39,6 @@ export const useUserRepos = (username: string) =>
     queryFn: ({ pageParam = 1 }) => fetchReposByUsername(username, pageParam),
     initialPageParam: 1,
     getNextPageParam: (lastPage, allPages) =>
-      lastPage.length === 5 ? allPages.length + 1 : undefined,
+      lastPage.length === LIMIT_PER_PAGE ? allPages.length + 1 : undefined,
     enabled: false,
   });
