@@ -11,6 +11,8 @@ import { useSearchGithubUsers } from "./hooks/useGithubQuery";
 
 import { GithubUsers } from "./components/GithubUsers";
 
+import { BoxError } from "src/components/ui/BoxError";
+
 export default function GithubExplorer() {
   const [openedUsers, setOpenedUsers] = useState<string[]>([]);
   const [inputText, setInputText] = useState<string>("");
@@ -25,6 +27,7 @@ export default function GithubExplorer() {
     hasNextPage,
     isLoading,
     isFetchingNextPage,
+    error,
   } = useSearchGithubUsers(inputText);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -70,6 +73,7 @@ export default function GithubExplorer() {
                 </Button>
               </VStack>
             </form>
+            {error && <BoxError message={error.message} />}
             {searchUsername && data?.pages && (
               <Text alignSelf="self-start" fontWeight="light">
                 Showing users for "{searchUsername}"

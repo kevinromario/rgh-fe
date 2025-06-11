@@ -11,3 +11,5 @@ export const MAX_WIDTH = {
 export const GITHUB_API_BASE = "https://api.github.com";
 
 export const LIMIT_PER_PAGE = 5;
+
+export const RATE_LIMIT_MSG = "API rate limit exceeded";
