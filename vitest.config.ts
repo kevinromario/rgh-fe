@@ -7,5 +7,11 @@ export default defineConfig({
     globals: true,
     environment: "jsdom",
     setupFiles: "./vitest.setup.ts",
+    coverage: {
+      provider: "v8", // or "c8"
+      reporter: ["text", "html"], // menampilkan di terminal dan folder HTML report
+      reportsDirectory: "./coverage",
+      exclude: ["**/test-utils/**", "**/*.d.ts"],
+    },
   },
 });
