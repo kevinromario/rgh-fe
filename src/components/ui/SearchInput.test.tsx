@@ -1,19 +1,20 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { screen, fireEvent } from "@testing-library/react";
 import { SearchInput } from "./SearchInput";
-import { ChakraProvider, defaultSystem } from "@chakra-ui/react";
+import { renderWithProviders } from "src/test/utils/renderWithProviders";
 
 const setup = (value = "") => {
   const onChange = vi.fn();
   const onClear = vi.fn();
 
-  render(
-    <ChakraProvider value={defaultSystem}>
-      <SearchInput value={value} onChange={onChange} onClear={onClear} />
-    </ChakraProvider>
+  renderWithProviders(
+    <SearchInput value={value} onChange={onChange} onClear={onClear} />
   );
 
-  return { onChange, onClear };
+  const input = screen.getByTestId("input-search");
+  const closeBtn = screen.queryByTestId("close-btn");
+
+  return { onChange, onClear, input, closeBtn };
 };
 
 describe("SearchInput", () => {
@@ -22,34 +23,25 @@ describe("SearchInput", () => {
   });
 
   it("renders input with placeholder", () => {
-    setup();
-    expect(screen.getByPlaceholderText("Enter username")).toBeInTheDocument();
+    expect(setup().input).toHaveAttribute("placeholder", "Enter username");
   });
 
   it("calls onChange when typing", () => {
-    const { onChange } = setup();
-    const input = screen.getByTestId("input-search");
-
+    const { input, onChange } = setup();
     fireEvent.change(input, { target: { value: "abc" } });
-
     expect(onChange).toHaveBeenCalledWith("abc");
   });
 
   it("does not show CloseButton if input is empty", () => {
-    setup("");
-
-    const closeBtn = screen.queryByTestId("close-btn");
+    const { closeBtn } = setup("");
     expect(closeBtn).not.toBeInTheDocument();
   });
 
   it("shows CloseButton and calls onClear when clicked", () => {
-    const { onClear } = setup("some text");
-
-    const closeBtn = screen.getByTestId("close-btn");
+    const { closeBtn, onClear } = setup("some text");
     expect(closeBtn).toBeInTheDocument();
 
-    fireEvent.click(closeBtn);
-
+    fireEvent.click(closeBtn!);
     expect(onClear).toHaveBeenCalled();
   });
 });
