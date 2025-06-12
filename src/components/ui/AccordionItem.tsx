@@ -5,6 +5,7 @@ type AccordionItemProps = {
   value: string;
   isOpened: boolean;
   children: React.ReactNode;
+  testId: string;
 };
 
 export function AccordionItem({
@@ -12,6 +13,7 @@ export function AccordionItem({
   value,
   isOpened,
   children,
+  testId,
 }: AccordionItemProps) {
   return (
     <Accordion.Item
@@ -21,7 +23,7 @@ export function AccordionItem({
       borderBottomStyle={isOpened ? "solid" : "none"}
     >
       <Accordion.ItemTrigger
-        data-testid={value}
+        data-testid={testId}
         cursor="pointer"
         bgColor="gray.200"
         paddingX="3"

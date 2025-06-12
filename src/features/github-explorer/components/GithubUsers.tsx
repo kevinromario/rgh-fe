@@ -49,20 +49,25 @@ export function GithubUsers(props: GithubUsersProps) {
             const isOpened = props.openedUsers.includes(user.id.toString());
             return (
               <AccordionItem
-                key={`user-${index}`}
+                key={index}
+                testId={`user-${index + 1}`}
                 value={user.id.toString()}
                 title={user.login}
                 isOpened={isOpened}
               >
-                <GithubRepositories user={user} isOpened={isOpened} />
+                <GithubRepositories
+                  userIndex={index + 1}
+                  user={user}
+                  isOpened={isOpened}
+                />
               </AccordionItem>
             );
           })}
           {!props.hasNextPage && !props.isLoading && users.length === 0 && (
-            <Text>- No user -</Text>
+            <Text data-testid="text-no-user">- No user -</Text>
           )}
           {!props.hasNextPage && !props.isLoading && users.length > 0 && (
-            <Text>- No more user -</Text>
+            <Text data-testid="text-no-more-user">- No more user -</Text>
           )}
           {props.hasNextPage && (
             <Button

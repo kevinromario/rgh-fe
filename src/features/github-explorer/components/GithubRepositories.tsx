@@ -18,6 +18,7 @@ import { BoxError } from "src/components/ui/BoxError";
 type GithubRepositoriesProps = {
   user: GithubUser;
   isOpened: boolean;
+  userIndex: number;
 };
 export function GithubRepositories(props: GithubRepositoriesProps) {
   const queryClient = useQueryClient();
@@ -51,7 +52,8 @@ export function GithubRepositories(props: GithubRepositoriesProps) {
         repositories.map((repo, index) => {
           return (
             <Box
-              key={`${props.user.login}-${index}`}
+              data-testid="repo-box"
+              key={`${props.user.login}-${index + 1}`}
               w="full"
               bgColor={accordionContentBgColor}
               padding="3"
@@ -59,31 +61,53 @@ export function GithubRepositories(props: GithubRepositoriesProps) {
             >
               <VStack alignItems="flex-start">
                 <HStack w="full" justifyContent="space-between">
-                  <Text fontWeight="bold">{repo.name}</Text>
+                  <Text
+                    data-testid={`user-${props.userIndex}-repo-${
+                      index + 1
+                    }-title`}
+                    fontWeight="bold"
+                  >
+                    {repo.name}
+                  </Text>
                   <HStack gap="1">
-                    <Text fontWeight="bold">{repo.stargazers_count}</Text>
+                    <Text
+                      data-testid={`user-${props.userIndex}-repo-${
+                        index + 1
+                      }-stars`}
+                      fontWeight="bold"
+                    >
+                      {repo.stargazers_count}
+                    </Text>
                     <Icon>
                       <FaStar />
                     </Icon>
                   </HStack>
                 </HStack>
-                <Text>{repo.description}</Text>
+                <Text
+                  data-testid={`user-${props.userIndex}-repo-${index}-description`}
+                >
+                  {repo.description}
+                </Text>
               </VStack>
             </Box>
           );
         })}
       {error && <BoxError message={error.message} />}
-      {isLoading && <Skeleton w="full" height="5" />}
+      {isLoading && (
+        <Skeleton data-testid="skeleton-loading" w="full" height="5" />
+      )}
       {!hasNextPage &&
         !isLoading &&
         repositories &&
         repositories?.length > 0 &&
-        !error && <Text>- No more repositories -</Text>}
+        !error && (
+          <Text data-testid="text-no-more-repo">- No more repositories -</Text>
+        )}
       {!hasNextPage &&
         !isLoading &&
         repositories &&
         repositories?.length === 0 &&
-        !error && <Text>- No repositories -</Text>}
+        !error && <Text data-testid="text-no-repo">- No repositories -</Text>}
       {hasNextPage && (
         <Button
           w="full"

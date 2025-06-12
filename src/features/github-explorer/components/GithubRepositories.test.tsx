@@ -113,7 +113,9 @@ describe("GithubRepositories", () => {
       },
     });
 
-    renderWithProviders(<GithubRepositories user={mockUser} isOpened={true} />);
+    renderWithProviders(
+      <GithubRepositories userIndex={1} user={mockUser} isOpened={true} />
+    );
     expect(screen.getByText("test-repo")).toBeInTheDocument();
     expect(screen.getByText("Test repo description")).toBeInTheDocument();
     expect(screen.getByText("42")).toBeInTheDocument();
@@ -122,7 +124,9 @@ describe("GithubRepositories", () => {
   it("should show error box when error is present", () => {
     mockReposQuery({ error: new Error("Failed to fetch") });
 
-    renderWithProviders(<GithubRepositories user={mockUser} isOpened={true} />);
+    renderWithProviders(
+      <GithubRepositories userIndex={1} user={mockUser} isOpened={true} />
+    );
     expect(screen.getByText(/failed to fetch/i)).toBeInTheDocument();
   });
 
@@ -132,7 +136,9 @@ describe("GithubRepositories", () => {
       hasNextPage: false,
     });
 
-    renderWithProviders(<GithubRepositories user={mockUser} isOpened={true} />);
+    renderWithProviders(
+      <GithubRepositories userIndex={1} user={mockUser} isOpened={true} />
+    );
     expect(screen.getByText(/no repositories/i)).toBeInTheDocument();
   });
 
@@ -154,7 +160,9 @@ describe("GithubRepositories", () => {
       hasNextPage: false,
     });
 
-    renderWithProviders(<GithubRepositories user={mockUser} isOpened={true} />);
+    renderWithProviders(
+      <GithubRepositories userIndex={1} user={mockUser} isOpened={true} />
+    );
     expect(screen.getByText(/no more repositories/i)).toBeInTheDocument();
   });
 
@@ -166,7 +174,9 @@ describe("GithubRepositories", () => {
       fetchNextPage: fetchNextPageMock,
     });
 
-    renderWithProviders(<GithubRepositories user={mockUser} isOpened={true} />);
+    renderWithProviders(
+      <GithubRepositories userIndex={1} user={mockUser} isOpened={true} />
+    );
     fireEvent.click(
       screen.getByRole("button", { name: /load more repositories/i })
     );
