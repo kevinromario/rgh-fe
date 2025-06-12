@@ -48,7 +48,7 @@ export default function GithubExplorer() {
         <Box w="full" maxWidth={MAX_WIDTH}>
           <VStack gap={5}>
             <HStack w="full" justifyContent="space-between">
-              <Text>GitHub Repositories Explorer</Text>
+              <Text data-testid="title-app">GitHub Repositories Explorer</Text>
               <ColorModeButton />
             </HStack>
             <form onSubmit={handleSubmit} style={{ width: "100%" }}>
@@ -63,6 +63,7 @@ export default function GithubExplorer() {
                   }}
                 />
                 <Button
+                  data-testid="search-btn"
                   type="submit"
                   w="full"
                   colorPalette="blue"
@@ -73,7 +74,9 @@ export default function GithubExplorer() {
                 </Button>
               </VStack>
             </form>
-            {error && <BoxError message={error.message} />}
+            {error && (
+              <BoxError data-testid="api-error" message={error.message} />
+            )}
             {searchUsername && data?.pages && (
               <Text alignSelf="self-start" fontWeight="light">
                 Showing users for "{searchUsername}"
