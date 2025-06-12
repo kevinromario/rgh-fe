@@ -1,7 +1,23 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { fetchUsersByUsername, fetchReposByUsername } from "./githubApi";
-import { LIMIT_PER_PAGE } from "src/constants";
+import { LIMIT_PER_PAGE, RATE_LIMIT_MSG } from "src/constants";
+
+import { handleError } from "./githubApi";
+
+const createMockError = (
+  message: string,
+  errors?: { field: string; code: string }[]
+) => {
+  return {
+    response: {
+      data: {
+        message,
+        errors,
+      },
+    },
+  } as unknown as AxiosError;
+};
 
 vi.mock("axios");
 const mockedAxios = axios as unknown as {
@@ -63,5 +79,52 @@ describe("GitHub API", () => {
         }
       );
     });
+  });
+});
+
+describe("handleError", () => {
+  it("should handle rate limit error", () => {
+    const error = createMockError(`API rate limit exceeded ${RATE_LIMIT_MSG}`);
+    const result = handleError(error);
+    expect(result).toBe("Too many requests. Please try again later");
+  });
+
+  it("should handle missing 'q' field error", () => {
+    const error = createMockError("Validation Failed", [
+      { field: "q", code: "missing" },
+    ]);
+    const result = handleError(error);
+    expect(result).toBe("Error: Validation Failed. Field username is missing");
+  });
+
+  it("should handle other field validation errors", () => {
+    const error = createMockError("Validation Failed", [
+      { field: "q", code: "invalid" },
+      { field: "type", code: "missing" },
+    ]);
+    const result = handleError(error);
+    expect(result).toBe(
+      "Error: Validation Failed. Field q is invalid. Field type is missing"
+    );
+  });
+
+  it("should return only message if no errors array", () => {
+    const error = createMockError("Something went wrong", undefined);
+    const result = handleError(error);
+    expect(result).toBe("Error: Something went wrong");
+  });
+
+  it("should return 'Unknown error' if no response", () => {
+    const error = {} as unknown as AxiosError;
+    const result = handleError(error);
+    expect(result).toBe("Error: Unknown error");
+  });
+});
+
+describe("fetchUsersByUsername", () => {
+  it("should throw 'Unknown error' for non-Axios error", async () => {
+    mockedAxios.get.mockRejectedValueOnce(new Error("Network down"));
+
+    await expect(fetchUsersByUsername("john")).rejects.toThrow("Unknown error");
   });
 });
