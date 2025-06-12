@@ -17,7 +17,13 @@ export default defineConfig({
       provider: "v8", // or "c8"
       reporter: ["text", "html"],
       reportsDirectory: "./coverage",
-      exclude: ["**/test-utils/**", "**/*.d.ts"],
+      exclude: [
+        "**/test-utils/**",
+        "**/*.d.ts",
+        "vite.config.ts",
+        "vitest.config.ts",
+        "eslint.config.js",
+      ],
     },
   },
 });
