@@ -39,6 +39,9 @@ export function GithubUsers(props: GithubUsersProps) {
           {props.data.pages
             .flatMap((p) => p.items)
             .map((user, index) => {
+              if (!user.id || !user.login) {
+                return null;
+              }
               const isOpened = props.openedUsers.includes(user.id.toString());
               return (
                 <AccordionItem
@@ -53,6 +56,7 @@ export function GithubUsers(props: GithubUsersProps) {
             })}
           {props.hasNextPage && (
             <Button
+              data-testid="load-more-user"
               w="full"
               variant="subtle"
               colorPalette="blue"
