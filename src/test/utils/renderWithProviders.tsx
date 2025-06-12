@@ -1,4 +1,3 @@
-// setupTestUtils.ts
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ChakraProvider, defaultSystem } from "@chakra-ui/react";
 import React from "react";
