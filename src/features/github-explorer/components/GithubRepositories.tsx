@@ -31,7 +31,7 @@ export function GithubRepositories(props: GithubRepositoriesProps) {
     isLoading,
     isFetchingNextPage,
     error,
-  } = useUserRepos(props.user.login);
+  } = useUserRepos(props.user.login || "");
 
   useEffect(() => {
     if (props.isOpened) {
