@@ -3,7 +3,7 @@ import { describe, it, expect, vi } from "vitest";
 import { GithubUsers } from "./GithubUsers";
 import type { UserResponse } from "../types/githubUser.type";
 import type { InfiniteData } from "@tanstack/react-query";
-import { renderWithProviders } from "src/test/renderWithProviders";
+import { renderWithProviders } from "src/test/utils/renderWithProviders";
 
 const users: InfiniteData<UserResponse, number> = {
   pages: [
