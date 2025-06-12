@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from "@testing-library/react";
+import { screen, fireEvent } from "@testing-library/react";
 import {
   afterEach,
   describe,
@@ -9,8 +9,6 @@ import {
 } from "vitest";
 import { GithubRepositories } from "../components/GithubRepositories";
 import { useUserRepos } from "../hooks/useGithubQuery";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ChakraProvider, defaultSystem } from "@chakra-ui/react";
 import type {
   UseInfiniteQueryResult,
   InfiniteData,
@@ -18,6 +16,7 @@ import type {
 } from "@tanstack/react-query";
 import type { GithubUser } from "../types/githubUser.type";
 import type { ReposResponse } from "../types/githubRepos.type";
+import { renderWithProviders } from "src/test/utils/renderWithProviders";
 
 vi.mock("../hooks/useGithubQuery", async (importOriginal) => {
   const mod = await importOriginal;
@@ -33,15 +32,6 @@ const mockUser: GithubUser = {
   login: "test-user",
   avatar_url: "",
   html_url: "",
-};
-
-const renderWithProvider = (ui: React.ReactElement) => {
-  const client = new QueryClient();
-  return render(
-    <QueryClientProvider client={client}>
-      <ChakraProvider value={defaultSystem}>{ui}</ChakraProvider>
-    </QueryClientProvider>
-  );
 };
 
 function mockReposQuery({
@@ -123,7 +113,7 @@ describe("GithubRepositories", () => {
       },
     });
 
-    renderWithProvider(<GithubRepositories user={mockUser} isOpened={true} />);
+    renderWithProviders(<GithubRepositories user={mockUser} isOpened={true} />);
     expect(screen.getByText("test-repo")).toBeInTheDocument();
     expect(screen.getByText("Test repo description")).toBeInTheDocument();
     expect(screen.getByText("42")).toBeInTheDocument();
@@ -132,7 +122,7 @@ describe("GithubRepositories", () => {
   it("should show error box when error is present", () => {
     mockReposQuery({ error: new Error("Failed to fetch") });
 
-    renderWithProvider(<GithubRepositories user={mockUser} isOpened={true} />);
+    renderWithProviders(<GithubRepositories user={mockUser} isOpened={true} />);
     expect(screen.getByText(/failed to fetch/i)).toBeInTheDocument();
   });
 
@@ -142,7 +132,7 @@ describe("GithubRepositories", () => {
       hasNextPage: false,
     });
 
-    renderWithProvider(<GithubRepositories user={mockUser} isOpened={true} />);
+    renderWithProviders(<GithubRepositories user={mockUser} isOpened={true} />);
     expect(screen.getByText(/no more repositories/i)).toBeInTheDocument();
   });
 
@@ -154,7 +144,7 @@ describe("GithubRepositories", () => {
       fetchNextPage: fetchNextPageMock,
     });
 
-    renderWithProvider(<GithubRepositories user={mockUser} isOpened={true} />);
+    renderWithProviders(<GithubRepositories user={mockUser} isOpened={true} />);
     fireEvent.click(
       screen.getByRole("button", { name: /load more repositories/i })
     );
