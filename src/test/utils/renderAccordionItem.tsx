@@ -15,7 +15,7 @@ export function renderAccordionItem({
 }) {
   return renderWithProviders(
     <Accordion.Root value={[]} multiple collapsible>
-      <AccordionItem title={title} value={value} isOpened={isOpened}>
+      <AccordionItem testId="1" title={title} value={value} isOpened={isOpened}>
         {children}
       </AccordionItem>
     </Accordion.Root>
