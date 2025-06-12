@@ -19,7 +19,7 @@ export function SearchInput({
         endElement={
           value ? (
             <CloseButton
-              data-testid="close-btn"
+              data-testid="reset-btn"
               size="xs"
               onClick={() => {
                 onClear();

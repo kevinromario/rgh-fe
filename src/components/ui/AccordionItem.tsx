@@ -15,12 +15,17 @@ export function AccordionItem({
 }: AccordionItemProps) {
   return (
     <Accordion.Item
-      data-testid={value}
+      data-testid="accordion-item"
       w="full"
       value={value}
       borderBottomStyle={isOpened ? "solid" : "none"}
     >
-      <Accordion.ItemTrigger cursor="pointer" bgColor="gray.200" paddingX="3">
+      <Accordion.ItemTrigger
+        data-testid={value}
+        cursor="pointer"
+        bgColor="gray.200"
+        paddingX="3"
+      >
         <Text flex="1">{title}</Text>
         <Accordion.ItemIndicator />
       </Accordion.ItemTrigger>

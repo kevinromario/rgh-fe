@@ -24,6 +24,8 @@ export default defineConfig({
         "vite.config.ts",
         "vitest.config.ts",
         "eslint.config.js",
+        "playwright-report/*",
+        "playwright.config.ts",
       ],
     },
   },

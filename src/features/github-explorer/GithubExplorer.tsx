@@ -78,7 +78,11 @@ export default function GithubExplorer() {
               <BoxError data-testid="api-error" message={error.message} />
             )}
             {searchUsername && data?.pages && (
-              <Text alignSelf="self-start" fontWeight="light">
+              <Text
+                data-testid="information-username"
+                alignSelf="self-start"
+                fontWeight="light"
+              >
                 Showing users for "{searchUsername}"
               </Text>
             )}

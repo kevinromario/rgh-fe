@@ -12,7 +12,7 @@ const setup = (value = "") => {
   );
 
   const input = screen.getByTestId("input-search");
-  const closeBtn = screen.queryByTestId("close-btn");
+  const closeBtn = screen.queryByTestId("reset-btn");
 
   return { onChange, onClear, input, closeBtn };
 };

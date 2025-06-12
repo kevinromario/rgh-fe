@@ -5,6 +5,10 @@ const mockCreateRoot = vi.fn(() => ({
   render: mockRender,
 }));
 
+vi.mock("./App", () => ({
+  default: () => "MockedApp",
+}));
+
 vi.mock("react-dom/client", async () => {
   const actual = await vi.importActual<typeof import("react-dom/client")>(
     "react-dom/client"

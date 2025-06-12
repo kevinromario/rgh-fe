@@ -29,7 +29,7 @@ describe("AccordionItem", () => {
       children: <p>Content</p>,
     });
 
-    const item = screen.getByTestId("item-2");
+    const item = screen.getByTestId("accordion-item");
     expect(item).toHaveStyle("border-bottom-style: solid");
   });
 
@@ -41,7 +41,7 @@ describe("AccordionItem", () => {
       children: <p>Content</p>,
     });
 
-    const item = screen.getByTestId("item-3");
+    const item = screen.getByTestId("accordion-item");
     expect(item).toHaveStyle("border-bottom-style: none");
   });
 });

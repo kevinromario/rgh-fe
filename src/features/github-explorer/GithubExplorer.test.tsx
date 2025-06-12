@@ -51,9 +51,23 @@ describe("GithubExplorer", () => {
     const input = screen.getByTestId("input-search");
     fireEvent.change(input, { target: { value: "kevin" } });
 
+    expect(input).toHaveValue("kevin");
+
     const button = screen.getByTestId("search-btn");
     fireEvent.click(button);
 
     expect(mockFetch).not.toHaveBeenCalledWith("kevin");
+  });
+
+  it("reset form", () => {
+    renderWithProvider();
+
+    const input = screen.getByTestId("input-search");
+    fireEvent.change(input, { target: { value: "kevin" } });
+    expect(input).toHaveValue("kevin");
+
+    const resetBtn = screen.getByTestId("reset-btn");
+    fireEvent.click(resetBtn);
+    expect(input).toHaveValue("");
   });
 });
