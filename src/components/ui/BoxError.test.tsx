@@ -1,24 +1,20 @@
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import { BoxError } from "./BoxError";
-import { ChakraProvider, defaultSystem } from "@chakra-ui/react";
 import { describe, it, expect } from "vitest";
+import { renderWithProviders } from "src/test/utils/renderWithProviders";
+
+function setup(message: string) {
+  renderWithProviders(<BoxError message={message} />);
+}
 
 describe("BoxError", () => {
   it("renders the given error message", () => {
-    render(
-      <ChakraProvider value={defaultSystem}>
-        <BoxError message="Something went wrong" />
-      </ChakraProvider>
-    );
+    setup("Something went wrong");
     expect(screen.getByText("Something went wrong")).toBeInTheDocument();
   });
 
   it("displays the error icon", () => {
-    render(
-      <ChakraProvider value={defaultSystem}>
-        <BoxError message="Error occurred" />
-      </ChakraProvider>
-    );
+    setup("Error occurred");
     const icon = screen.getByTestId("icon-error");
     expect(icon).toBeInTheDocument();
   });

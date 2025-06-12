@@ -1,9 +1,8 @@
-// services/githubApi.ts
 import axios, { AxiosError } from "axios";
 import { GITHUB_API_BASE, LIMIT_PER_PAGE, RATE_LIMIT_MSG } from "src/constants";
 import type { GithubErrorResponse } from "../types/githubError.type";
 
-const handleError = (error: unknown) => {
+export const handleError = (error: unknown) => {
   const githubError = error as AxiosError<GithubErrorResponse>;
 
   const message = githubError.response?.data.message || "Unknown error";
@@ -21,7 +20,7 @@ const handleError = (error: unknown) => {
     }
   });
 
-  return `Error: ${message}${errors.length ? `. ${errors.join(".")}` : ""}`;
+  return `Error: ${message}${errors.length ? `. ${errors.join(". ")}` : ""}`;
 };
 
 export const fetchUsersByUsername = async (

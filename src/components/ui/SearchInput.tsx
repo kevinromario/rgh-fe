@@ -19,6 +19,7 @@ export function SearchInput({
         endElement={
           value ? (
             <CloseButton
+              data-testid="close-btn"
               size="xs"
               onClick={() => {
                 onClear();
@@ -30,6 +31,7 @@ export function SearchInput({
         }
       >
         <Input
+          data-testid="input-search"
           ref={inputRef}
           value={value}
           placeholder="Enter username"
