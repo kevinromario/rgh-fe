@@ -11,7 +11,7 @@ import { FaStar } from "react-icons/fa";
 import { useColorModeValue } from "src/hooks/useColorMode";
 import type { GithubUser } from "../types/githubUser.type";
 import { useUserRepos } from "../hooks/useGithubQuery";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { BoxError } from "src/components/ui/BoxError";
 
@@ -40,11 +40,15 @@ export function GithubRepositories(props: GithubRepositoriesProps) {
       queryClient.removeQueries({ queryKey: ["repos", props.user.login] });
     }
   }, [props.isOpened, fetchGithubRepos, props.user.login, queryClient]);
+
+  const repositories = useMemo(() => {
+    return data?.pages.flatMap((p) => p);
+  }, [data]);
+
   return (
     <VStack>
-      {data?.pages
-        .flatMap((p) => p)
-        .map((repo, index) => {
+      {repositories &&
+        repositories.map((repo, index) => {
           return (
             <Box
               key={`${props.user.login}-${index}`}
@@ -70,9 +74,16 @@ export function GithubRepositories(props: GithubRepositoriesProps) {
         })}
       {error && <BoxError message={error.message} />}
       {isLoading && <Skeleton w="full" height="5" />}
-      {!hasNextPage && !isLoading && !error && (
-        <Text>- No more repositories -</Text>
-      )}
+      {!hasNextPage &&
+        !isLoading &&
+        repositories &&
+        repositories?.length > 0 &&
+        !error && <Text>- No more repositories -</Text>}
+      {!hasNextPage &&
+        !isLoading &&
+        repositories &&
+        repositories?.length === 0 &&
+        !error && <Text>- No repositories -</Text>}
       {hasNextPage && (
         <Button
           w="full"

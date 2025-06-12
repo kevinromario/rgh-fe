@@ -126,9 +126,31 @@ describe("GithubRepositories", () => {
     expect(screen.getByText(/failed to fetch/i)).toBeInTheDocument();
   });
 
-  it("should show 'No more repositories' when hasNextPage is false", () => {
+  it("should show 'No repositories' when hasNextPage is false and page is empty", () => {
     mockReposQuery({
       data: { pages: [[]], pageParams: [1] },
+      hasNextPage: false,
+    });
+
+    renderWithProviders(<GithubRepositories user={mockUser} isOpened={true} />);
+    expect(screen.getByText(/no repositories/i)).toBeInTheDocument();
+  });
+
+  it("should show 'No more repositories' when hasNextPage is false", () => {
+    mockReposQuery({
+      data: {
+        pages: [
+          [
+            {
+              id: 1,
+              name: "test-repo",
+              description: "Test repo description",
+              stargazers_count: 42,
+            },
+          ],
+        ],
+        pageParams: [1],
+      },
       hasNextPage: false,
     });
 

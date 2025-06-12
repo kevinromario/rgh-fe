@@ -1,4 +1,9 @@
-import { Accordion as AccordionRoot, VStack, Button } from "@chakra-ui/react";
+import {
+  Accordion as AccordionRoot,
+  VStack,
+  Button,
+  Text,
+} from "@chakra-ui/react";
 import { LightMode } from "src/components/ui/ColorMode";
 import type { UserResponse } from "../types/githubUser.type";
 import type {
@@ -26,6 +31,7 @@ type GithubUsersProps = {
 
 export function GithubUsers(props: GithubUsersProps) {
   const { Root: Accordion } = AccordionRoot;
+  const users = props.data.pages.flatMap((p) => p.items);
 
   return (
     <Accordion
@@ -36,24 +42,28 @@ export function GithubUsers(props: GithubUsersProps) {
     >
       <VStack>
         <LightMode>
-          {props.data.pages
-            .flatMap((p) => p.items)
-            .map((user, index) => {
-              if (!user.id || !user.login) {
-                return null;
-              }
-              const isOpened = props.openedUsers.includes(user.id.toString());
-              return (
-                <AccordionItem
-                  key={`user-${index}`}
-                  value={user.id.toString()}
-                  title={user.login}
-                  isOpened={isOpened}
-                >
-                  <GithubRepositories user={user} isOpened={isOpened} />
-                </AccordionItem>
-              );
-            })}
+          {users.map((user, index) => {
+            if (!user.id || !user.login) {
+              return null;
+            }
+            const isOpened = props.openedUsers.includes(user.id.toString());
+            return (
+              <AccordionItem
+                key={`user-${index}`}
+                value={user.id.toString()}
+                title={user.login}
+                isOpened={isOpened}
+              >
+                <GithubRepositories user={user} isOpened={isOpened} />
+              </AccordionItem>
+            );
+          })}
+          {!props.hasNextPage && !props.isLoading && users.length === 0 && (
+            <Text>- No user -</Text>
+          )}
+          {!props.hasNextPage && !props.isLoading && users.length > 0 && (
+            <Text>- No more user -</Text>
+          )}
           {props.hasNextPage && (
             <Button
               data-testid="load-more-user"
