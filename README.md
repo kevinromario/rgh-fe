@@ -1,54 +1,85 @@
-# React + TypeScript + Vite
+# GitHub Repositories Explorer
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A web application built with **React**, **TypeScript**, **Chakra UI**, **TanStack Query**, and **Axios**. This app allows users to search for GitHub users and explore their public repositories interactively.
 
-Currently, two official plugins are available:
+🌐 **Live Demo**: [https://rgh-fe.vercel.app/](https://rgh-fe.vercel.app/)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
+## ✨ Features
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- 🔍 Search GitHub users by username
+- 📂 View list of repositories of a user
+- 🌙 Light/Dark mode toggle using Chakra UI
+- ⚡ Fast and reactive UI with TanStack Query and Axios
+- 🧪 Unit & integration testing with Vitest
+- 🧭 End-to-end testing with Playwright
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+---
+
+## 🛠 Tech Stack
+
+- **React** with **TypeScript**
+- **Chakra UI** for styling
+- **TanStack Query** for data fetching and caching
+- **Axios** for API requests
+- **Vitest** and **@testing-library/react** for unit & integration testing
+- **Playwright** for E2E testing
+
+---
+
+## 🚀 Getting Started
+
+### 📦 Installation
+
+Make sure you have **Node.js v18+** and **npm** installed. Then:
+
+```
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### 🧪 Development
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+To run the app in development mode:
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+```
+npm run dev
+```
+
+Visit http://localhost:5173 in your browser.
+
+### 🏗 Build
+
+To create a production build:
+
+```
+npm run build
+```
+
+## 🧪 Testing
+
+### ✅ Run Unit & Integration Tests
+
+```
+npm run test
+```
+
+### 📊 Generate Coverage Report
+
+```
+npm run coverage
+```
+
+### 🧭 Run End-to-End (E2E) Tests
+
+Run all tests and open the report:
+
+```
+npm run test-e2e
+```
+
+Run Playwright in interactive UI mode:
+
+```
+npm run test-e2e:ui
 ```
