@@ -25,7 +25,7 @@ beforeEach(() => {
   mockCreateRoot.mockClear();
 });
 
-describe("index.tsx", () => {
+describe("main.tsx", () => {
   it("should call createRoot and render the app", async () => {
     await import("./main");
 
